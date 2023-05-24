@@ -21,35 +21,50 @@ void main() {
       isMadura: isMadura);
 
   //Chamando o método
+  print("\nComo base nas informações fornecidas, temos a seguinte resposta:\n");
   isMadura = fruta1.estaMadura(diasDesdeColheita, nome);
 
-  print("\nDados da fruta\n");
-  print("Fruta: ${fruta1.nome}\n"
-      "Peso: ${fruta1.peso}Kg\n"
+  print(
+      "\n--------------------------------Fruto: ${fruta1.nome}--------------------------------\n"
+      "Peso: ${fruta1.peso.toStringAsPrecision(3)}Kg\n"
       "Cor: ${fruta1.cor}\n"
       "Sabor: ${fruta1.sabor}\n"
-      "Foi colhida à ${fruta1.diasDesdeColheita} dias\n"
-      "A fruta está madura? $isMadura");
+      "Foi colhido à ${fruta1.diasDesdeColheita} dias\n"
+      "O frutO está maduro? $isMadura");
+
+  //instânciando os objetos
+
+  print(
+      "\n--------------------------------Tentando as novas classes--------------------------------\n");
+  Legumes brocolis = Legumes("Blocolis", 240, "verde", true);
+  Citricas laranja = Citricas("Larannja", 80, "Laranja", "Doce", 15, 6);
+  FrutasSecas castanha = FrutasSecas("Castanha", 5, "Marrom", "Suave", 8, 0.38);
+
+  brocolis.printAlimento();
+  laranja.printAlimento();
+  castanha.printAlimento();
+
+  brocolis.cozinhar();
+  laranja.fazerSuco();
+  laranja.estaMadura(diasDesdeColheita, "Laranja");
 }
 
 /*FIM MAIN */
 
 //Classe Fruta
-class Fruta {
-  String nome;
-  double peso;
-  String cor;
+class Fruta extends Alimento {
   String sabor;
   int diasDesdeColheita;
   bool? isMadura;
 //Construtor variado
   Fruta(
-      {required this.nome,
-      required this.peso,
-      this.cor = "n/a",
+      {required String nome,
+      required double peso,
+      String cor = "n/a",
       required this.sabor,
       required this.diasDesdeColheita,
-      this.isMadura}) {
+      this.isMadura})
+      : super(nome, peso, cor) {
     nome = nome.toUpperCase();
     cor = cor.toUpperCase();
     sabor = sabor.toUpperCase();
@@ -72,20 +87,24 @@ class Fruta {
 
     if (isMadura == true) {
       print(
-          "A fruta $nome precisa de $diasParaMadura dias para amadurecer e já fazem $diasDesdeColheita dias que ela foi colhida, então a $nome está madura");
+          "O fruto $nome precisa de $diasParaMadura dias para amadurecer e já fazem $diasDesdeColheita dias que ele foi colhido, então, $nome está madura");
       return true;
     } else {
       print(
-          "A $nome foi colhida a $diasDesdeColheita, mas precisa de $diasParaMadura dias para amadurecer, ainda faltam ${diasParaMadura - diasDesdeColheita} dias para que a $nome esteja completamente madura");
+          "O fruto $nome foi colhidO a $diasDesdeColheita, mas precisa de $diasParaMadura dias para amadurecer, ainda faltam ${diasParaMadura - diasDesdeColheita} dias para que $nome esteja completamente madura");
       return false;
     }
   }
+
+  void fazerSuco() {
+    print(
+        "$nome é um ótimo fruto para fazer suco, você concerteza vai adorar!");
+  }
 }
-/*Fim Classe Fruta */
 
 //Função Cadastrar fruta
 List cadastrarFruta() {
-  print("Digite os dados da Fruta\n");
+  print("Digite os dados do Fruto\n");
   print("Nome: ");
   String? inputNome = stdin.readLineSync();
   String nome = inputNome.toString();
@@ -116,4 +135,70 @@ List cadastrarFruta() {
 
   return listaFruta;
 }
-//Fim  Função Cadastrar Fruta
+
+//Classe Alimento
+class Alimento {
+  String nome;
+  double peso;
+  String cor;
+
+  Alimento(this.nome, this.peso, this.cor);
+
+  void printAlimento() {
+    print("Este(a) $nome pesa $peso kg e é $cor.");
+  }
+}
+
+//Classe Lugumes
+class Legumes extends Alimento {
+  bool isPrecisaCozinhar;
+
+  //construtor
+  Legumes(String nome, double peso, String cor, this.isPrecisaCozinhar)
+      : super(nome, peso, cor);
+
+  //Métodos
+  void cozinhar() {
+    if (isPrecisaCozinhar == true) {
+      print("O legume está cozinhando!");
+    } else {
+      print("Não precisa cozinhar");
+    }
+  }
+}
+
+//Classe Citricas
+class Citricas extends Fruta {
+  double nivelDeAzedo;
+
+  //Construtor
+  Citricas(String nome, double peso, String cor, String sabor,
+      int diasDesdeColheita, this.nivelDeAzedo)
+      : super(
+            nome: nome,
+            peso: peso,
+            cor: cor,
+            sabor: sabor,
+            diasDesdeColheita: diasDesdeColheita);
+
+  void existeRefri(bool existe) {
+    if (existe = true) {
+      print("Existe!");
+    } else {
+      print("Não existe.");
+    }
+  }
+}
+
+class FrutasSecas extends Fruta {
+  double porcentagemDeOleoNatural;
+
+  FrutasSecas(String nome, double peso, String cor, String sabor,
+      int diasDesdeColheita, this.porcentagemDeOleoNatural)
+      : super(
+            nome: nome,
+            peso: peso,
+            cor: cor,
+            sabor: sabor,
+            diasDesdeColheita: diasDesdeColheita);
+}
