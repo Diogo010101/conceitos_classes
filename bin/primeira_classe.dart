@@ -21,23 +21,19 @@ void main() {
       isMadura: isMadura);
 
   //Chamando o método
-  print("\nComo base nas informações fornecidas, temos a seguinte resposta:\n");
   isMadura = fruta1.estaMadura(diasDesdeColheita, nome);
 
-  print(
-      "\n--------------------------------Fruto: ${fruta1.nome}--------------------------------\n"
+  print("\nDados da fruta\n");
+  print("Fruta: ${fruta1.nome}\n"
       "Peso: ${fruta1.peso.toStringAsPrecision(3)}Kg\n"
       "Cor: ${fruta1.cor}\n"
       "Sabor: ${fruta1.sabor}\n"
-      "Foi colhido à ${fruta1.diasDesdeColheita} dias\n"
-      "O frutO está maduro? $isMadura");
+      "Foi colhida à ${fruta1.diasDesdeColheita} dias\n"
+      "A fruta está madura? $isMadura");
 
   //instânciando os objetos
-
-  print(
-      "\n--------------------------------Tentando as novas classes--------------------------------\n");
   Legumes brocolis = Legumes("Blocolis", 240, "verde", true);
-  Citricas laranja = Citricas("Larannja", 80, "Laranja", "Doce", 15, 6);
+  Citricas laranja = Citricas("Laranja", 80, "Laranja", "Doce", 15, 6);
   FrutasSecas castanha = FrutasSecas("Castanha", 5, "Marrom", "Suave", 8, 0.38);
 
   brocolis.printAlimento();
@@ -47,12 +43,20 @@ void main() {
   brocolis.cozinhar();
   laranja.fazerSuco();
   laranja.estaMadura(diasDesdeColheita, "Laranja");
+
+  //Usando o método da classe Abstrata Bolo que importamos para a classe Fruta,
+  laranja.separarIngredientes();
+  laranja.prepararMassa();
+  laranja.assar();
+
+  print("\n");
+  castanha.prepararMassa();
 }
 
 /*FIM MAIN */
 
 //Classe Fruta
-class Fruta extends Alimento {
+class Fruta extends Alimento implements Bolo {
   String sabor;
   int diasDesdeColheita;
   bool? isMadura;
@@ -87,11 +91,11 @@ class Fruta extends Alimento {
 
     if (isMadura == true) {
       print(
-          "O fruto $nome precisa de $diasParaMadura dias para amadurecer e já fazem $diasDesdeColheita dias que ele foi colhido, então, $nome está madura");
+          "A fruta $nome precisa de $diasParaMadura dias para amadurecer e já fazem $diasDesdeColheita dias que ela foi colhida, então a $nome está madura");
       return true;
     } else {
       print(
-          "O fruto $nome foi colhidO a $diasDesdeColheita, mas precisa de $diasParaMadura dias para amadurecer, ainda faltam ${diasParaMadura - diasDesdeColheita} dias para que $nome esteja completamente madura");
+          "A $nome foi colhida a $diasDesdeColheita, mas precisa de $diasParaMadura dias para amadurecer, ainda faltam ${diasParaMadura - diasDesdeColheita} dias para que a $nome esteja completamente madura");
       return false;
     }
   }
@@ -100,11 +104,29 @@ class Fruta extends Alimento {
     print(
         "$nome é um ótimo fruto para fazer suco, você concerteza vai adorar!");
   }
+
+  //Métodos da classe abstrata Bolo na classe Fruta
+  @override
+  void separarIngredientes() {
+    print(
+        "Separar a(o) $nome o restante dos ingredientes para preparar o bolo");
+  }
+
+  @override
+  void prepararMassa() {
+    print(
+        "Pré aquecer o forno e depois misture a(o) $nome com açucar, ovos, água e fermento");
+  }
+
+  @override
+  void assar() {
+    print("Colocar no forno de 30 a 40 minutos e você terá um bolo de $nome");
+  }
 }
 
 //Função Cadastrar fruta
 List cadastrarFruta() {
-  print("Digite os dados do Fruto\n");
+  print("Digite os dados da Fruta\n");
   print("Nome: ");
   String? inputNome = stdin.readLineSync();
   String nome = inputNome.toString();
@@ -150,7 +172,7 @@ class Alimento {
 }
 
 //Classe Lugumes
-class Legumes extends Alimento {
+class Legumes extends Alimento implements Bolo {
   bool isPrecisaCozinhar;
 
   //construtor
@@ -164,6 +186,21 @@ class Legumes extends Alimento {
     } else {
       print("Não precisa cozinhar");
     }
+  }
+
+  @override
+  void separarIngredientes() {
+    // TODO: implement separarIngredientes
+  }
+
+  @override
+  void prepararMassa() {
+    //TODO implement fazerMassa
+  }
+
+  @override
+  void assar() {
+    // TODO: implement assar
   }
 }
 
@@ -201,4 +238,36 @@ class FrutasSecas extends Fruta {
             cor: cor,
             sabor: sabor,
             diasDesdeColheita: diasDesdeColheita);
+
+  @override
+  void prepararMassa() {
+    print(
+        "Retirar as cascas se houver e depois misturar com a farinha, ovos, água, açucar e fermento");
+  }
+}
+
+class FrutosDoMar extends Alimento {
+  bool temEspinha;
+
+  FrutosDoMar(String nome, double peso, String cor, this.temEspinha)
+      : super(
+          nome,
+          peso,
+          cor,
+        );
+
+  void pescar() {
+    print("Pescou $nome de $peso kg");
+  }
+}
+
+//Criando a classe Abstrata
+
+abstract class Bolo {
+  //Separo os ingredientes
+  void separarIngredientes();
+  //Preparo a massa
+  void prepararMassa();
+  //Assar
+  void assar();
 }
